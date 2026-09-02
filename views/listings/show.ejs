@@ -1,0 +1,132 @@
+<% layout("/layouts/boilerplate") %>
+
+<div class="container my-4 my-md-5">
+    <!-- Back Button -->
+    <div class="mb-4">
+        <button onclick="window.history.back()" class="btn btn-outline-secondary btn-sm rounded-pill px-3">
+            <i class="fa-solid fa-arrow-left me-1"></i> Back to Gallery
+        </button>
+    </div>
+
+    <!-- Main Content Container -->
+    <div class="row justify-content-center g-4">
+        <!-- Left: High-Res Image Display -->
+        <div class="col-12 col-lg-8">
+            <div class="card detail-card">
+                <div class="detail-img-container">
+                    <img src="<%= image.image?.url || image.url %>" class="detail-img" alt="<%= image.title %>">
+                </div>
+            </div>
+        </div>
+
+        <!-- Right: Image Metadata & Actions -->
+        <div class="col-12 col-lg-4">
+            <div class="card border-0 shadow-sm rounded-4 p-4 bg-white h-100 d-flex flex-column justify-content-between">
+                <div>
+                    <!-- Title & Category Badge -->
+                    <div class="d-flex align-items-center justify-content-between gap-2 mb-3">
+                        <span class="badge bg-primary text-capitalize rounded-pill px-3 py-1-5 fs-6">
+                            <%= image.category || 'General' %>
+                        </span>
+                        <a href="<%= image.image?.url || image.url %>" target="_blank" download class="btn btn-outline-primary btn-sm rounded-pill px-3">
+                            <i class="fa-solid fa-download me-1"></i> Download
+                        </a>
+                    </div>
+
+                    <h2 class="fw-bold text-dark mb-4"><%= image.title %></h2>
+
+                    <!-- Uploader Info Card -->
+                    <div class="d-flex align-items-center gap-3 p-3 bg-light rounded-3 mb-4">
+                        <div class="uploader-avatar">
+                            <%= (image.owner && image.owner.username) ? image.owner.username.charAt(0).toUpperCase() : 'C' %>
+                        </div>
+                        <div>
+                            <p class="small text-muted mb-0">Uploaded by</p>
+                            <h6 class="fw-bold text-dark mb-0">@<%= image.owner?.username || 'Community Creator' %></h6>
+                        </div>
+                    </div>
+
+                    <!-- Tags List -->
+                    <% if (image.tags && image.tags.length > 0) { %>
+                        <div class="mb-4">
+                            <h6 class="fw-bold text-dark small text-uppercase tracking-wider mb-2">Tags</h6>
+                            <div class="d-flex flex-wrap gap-1">
+                                <% image.tags.forEach(tag => { %>
+                                    <a href="/search?q=<%= tag %>" class="badge bg-light text-dark border text-decoration-none py-1-5 px-2.5 rounded-2">
+                                        #<%= tag %>
+                                    </a>
+                                <% }) %>
+                            </div>
+                        </div>
+                    <% } %>
+                </div>
+
+                <!-- Owner / Admin Action Buttons -->
+                <% 
+                    const isOwnerOrAdmin = typeof currUser !== "undefined" && currUser && 
+                        (currUser.role === 'admin' || (image.owner && (image.owner._id ? image.owner._id.toString() === currUser._id.toString() : image.owner.toString() === currUser._id.toString())));
+                %>
+                <% if (isOwnerOrAdmin) { %>
+                    <div class="pt-3 border-top mt-4">
+                        <p class="small text-muted fw-semibold mb-2"><i class="fa-solid fa-gear me-1"></i> Management Options</p>
+                        <div class="d-flex gap-2">
+                            <a href="/images/<%= image._id %>/edit" class="btn btn-outline-dark w-100 rounded-3">
+                                <i class="fa-solid fa-pen-to-square me-1"></i> Edit
+                            </a>
+                            <!-- Trigger Delete Confirmation Modal -->
+                            <button type="button" class="btn btn-outline-danger w-100 rounded-3" data-bs-toggle="modal" data-bs-target="#deleteModal">
+                                <i class="fa-solid fa-trash me-1"></i> Delete
+                            </button>
+                        </div>
+                    </div>
+                <% } %>
+            </div>
+        </div>
+    </div>
+
+    <!-- Related Images Section -->
+    <% if (typeof relatedImages !== "undefined" && relatedImages && relatedImages.length > 0) { %>
+        <div class="mt-5 pt-4 border-top">
+            <h4 class="fw-bold text-dark mb-4">Related Photos</h4>
+            <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
+                <% relatedImages.forEach(relImg => { %>
+                    <div class="col">
+                        <a href="/images/<%= relImg._id || relImg.id %>" class="text-decoration-none">
+                            <div class="card photo-card h-100">
+                                <img src="<%= relImg.image?.url || relImg.url %>" class="photo-card-img" alt="<%= relImg.title %>" loading="lazy">
+                                <div class="photo-card-overlay">
+                                    <h6 class="photo-card-title"><%= relImg.title %></h6>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                <% }) %>
+            </div>
+        </div>
+    <% } %>
+</div>
+
+<!-- Delete Confirmation Modal -->
+<% if (typeof currUser !== "undefined" && currUser) { %>
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content rounded-4 border-0 shadow-lg">
+      <div class="modal-header border-0 pb-0">
+        <h5 class="modal-title fw-bold text-danger" id="deleteModalLabel">
+            <i class="fa-solid fa-triangle-exclamation me-2"></i> Delete Photo
+        </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body py-3">
+        <p class="mb-0 text-muted">Are you sure you want to delete <strong>"<%= image.title %>"</strong>? This action cannot be undone.</p>
+      </div>
+      <div class="modal-footer border-0 pt-0">
+        <button type="button" class="btn btn-light rounded-pill px-4" data-bs-dismiss="modal">Cancel</button>
+        <form action="/images/<%= image._id %>?_method=DELETE" method="POST" class="m-0">
+            <button type="submit" class="btn btn-danger rounded-pill px-4">Confirm Delete</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<% } %>

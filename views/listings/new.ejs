@@ -1,0 +1,69 @@
+<% layout("/layouts/boilerplate") %>
+
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-12 col-md-8 col-lg-6">
+            <button onclick="window.history.back()" class="btn btn-outline-secondary btn-sm rounded-pill px-3 mb-3">
+                <i class="fa-solid fa-arrow-left me-1"></i> Back
+            </button>
+
+            <div class="form-card">
+                <div class="d-flex align-items-center gap-2 mb-3">
+                    <i class="fa-solid fa-cloud-arrow-up fs-3 text-primary"></i>
+                    <h3 class="fw-bold mb-0">Upload New Photo</h3>
+                </div>
+                <p class="text-muted small mb-4">Share your work with thousands of creators worldwide.</p>
+
+                <form action="/images" method="POST" enctype="multipart/form-data" novalidate class="needs-validation">
+                    <!-- Title Input -->
+                    <div class="mb-3">
+                        <label for="title" class="form-label fw-semibold text-dark">Photo Title</label>
+                        <input type="text" id="title" name="title" class="form-control" placeholder="e.g. Sunset over Misty Mountains" required minlength="2" maxlength="100">
+                        <div class="invalid-feedback">Please enter a valid title (at least 2 characters).</div>
+                    </div>
+
+                    <!-- Image File Input -->
+                    <div class="mb-3">
+                        <label for="imageFileInput" class="form-label fw-semibold text-dark">Select Image File</label>
+                        <input type="file" id="imageFileInput" name="url" class="form-control" accept="image/*" required>
+                        <div class="invalid-feedback">Please upload an image file (PNG, JPG, WEBP).</div>
+                    </div>
+
+                    <!-- Live Image Preview Container -->
+                    <div id="imagePreviewContainer" class="mb-3 d-none">
+                        <label class="form-label fw-semibold text-dark small">Preview</label>
+                        <div class="rounded-3 overflow-hidden border bg-light p-2 text-center" style="max-height: 250px;">
+                            <img id="imagePreview" src="#" alt="Preview" class="img-fluid rounded-2" style="max-height: 230px; object-fit: contain;">
+                        </div>
+                    </div>
+
+                    <!-- Category Selector -->
+                    <div class="mb-3">
+                        <label for="category" class="form-label fw-semibold text-dark">Category</label>
+                        <select id="category" name="category" class="form-select" required>
+                            <option value="" disabled selected>Choose a category...</option>
+                            <option value="nature">Nature</option>
+                            <option value="animals">Animals</option>
+                            <option value="anime">Anime</option>
+                            <option value="universe">Universe</option>
+                            <option value="other">Other</option>
+                        </select>
+                        <div class="invalid-feedback">Please select a category.</div>
+                    </div>
+
+                    <!-- Tags Input -->
+                    <div class="mb-4">
+                        <label for="tags" class="form-label fw-semibold text-dark">Tags <span class="text-muted fw-normal">(comma-separated)</span></label>
+                        <input type="text" id="tags" name="tags" class="form-control" placeholder="e.g. landscape, mountains, sunset, outdoor">
+                        <div class="form-text">Separate tags with commas to help users find your photo.</div>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <button type="submit" class="btn btn-primary-custom w-100 py-2 fs-6">
+                        <i class="fa-solid fa-cloud-arrow-up me-1"></i> Upload Photo
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

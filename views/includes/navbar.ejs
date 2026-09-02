@@ -1,0 +1,80 @@
+<nav class="navbar navbar-expand-lg navbar-dark sticky-top custom-navbar py-2 px-3">
+    <div class="container-fluid">
+        <!-- Brand Logo -->
+        <a class="navbar-brand navbar-brand-logo me-4" href="/images">
+            <i class="fa-solid fa-camera-retro brand-icon"></i>
+            <span>SP PHOTOS</span>
+        </a>
+
+        <!-- Hamburger Mobile Toggler -->
+        <button class="navbar-toggler border-0 p-2" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMain" aria-controls="navbarMain" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <!-- Navbar Links & Actions -->
+        <div class="collapse navbar-collapse" id="navbarMain">
+            <!-- Left Navigation Links -->
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0 align-items-lg-center">
+                <li class="nav-item">
+                    <a class="nav-link nav-link-custom <%= (typeof currPath !== 'undefined' && (currPath === '/' || currPath === '/images')) ? 'active' : '' %>" href="/images">
+                        <i class="fa-solid fa-compass me-1"></i> Explore
+                    </a>
+                </li>
+                <% if (typeof currUser !== "undefined" && currUser) { %>
+                    <li class="nav-item">
+                        <a class="nav-link nav-link-custom text-white fw-bold ms-lg-2" href="/images/new">
+                            <i class="fa-solid fa-cloud-arrow-up me-1 text-primary"></i> Upload Photo
+                        </a>
+                    </li>
+                <% } %>
+            </ul>
+
+            <!-- Navbar Quick Search (Visible when not on hero page or for quick search) -->
+            <form action="/search" method="GET" class="d-flex me-lg-3 my-2 my-lg-0 role-search">
+                <div class="input-group input-group-sm">
+                    <input type="text" name="q" class="form-control bg-dark text-white border-secondary px-3 rounded-start-pill" placeholder="Search photos..." style="max-width: 220px;" required>
+                    <button class="btn btn-outline-secondary text-white rounded-end-pill px-3" type="submit">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                    </button>
+                </div>
+            </form>
+
+            <!-- User Auth Controls -->
+            <div class="d-flex align-items-center gap-2 mt-2 mt-lg-0">
+                <% if (typeof currUser === "undefined" || !currUser) { %>
+                    <a href="/login" class="btn btn-sm btn-outline-light px-3 py-1-5 rounded-pill fw-semibold">Log In</a>
+                    <a href="/signup" class="btn btn-sm btn-primary-custom px-3 py-1-5 rounded-pill fw-semibold">Sign Up</a>
+                <% } else { %>
+                    <div class="dropdown">
+                        <button class="btn btn-sm btn-outline-light rounded-pill dropdown-toggle d-flex align-items-center gap-2 px-3 py-1" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fa-solid fa-user-circle fs-6"></i>
+                            <span class="fw-semibold">@<%= currUser.username %></span>
+                            <% if (currUser.role === 'admin') { %>
+                                <span class="badge bg-danger rounded-pill ms-1" style="font-size: 0.65rem;">ADMIN</span>
+                            <% } %>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end shadow-lg border-0 rounded-3 mt-2 p-2" style="min-width: 200px;">
+                            <li>
+                                <div class="px-3 py-2 border-bottom">
+                                    <p class="small text-muted mb-0">Signed in as</p>
+                                    <p class="fw-bold text-dark mb-0">@<%= currUser.username %></p>
+                                </div>
+                            </li>
+                            <li>
+                                <a class="dropdown-menu-item dropdown-item rounded-2 mt-1 py-2 text-dark" href="/images/new">
+                                    <i class="fa-solid fa-plus me-2 text-primary"></i> Upload New Photo
+                                </a>
+                            </li>
+                            <li><hr class="dropdown-divider my-1"></li>
+                            <li>
+                                <a class="dropdown-menu-item dropdown-item rounded-2 py-2 text-danger" href="/logout">
+                                    <i class="fa-solid fa-right-from-bracket me-2"></i> Log Out
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                <% } %>
+            </div>
+        </div>
+    </div>
+</nav>

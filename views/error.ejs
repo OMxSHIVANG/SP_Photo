@@ -1,0 +1,17 @@
+<% layout("/layouts/boilerplate") %>
+
+<div class="container my-5 text-center">
+    <div class="row justify-content-center">
+        <div class="col-12 col-md-6">
+            <div class="card border-0 shadow-sm p-4 rounded-4 bg-white">
+                <h1 class="display-3 fw-bold text-danger mb-3"><%= err.statusCode || 500 %></h1>
+                <h4 class="fw-semibold text-dark mb-4"><%= err.message || "Something went wrong" %></h4>
+                <div>
+                    <a href="/images" class="btn btn-primary px-4 py-2 rounded-pill">
+                        <i class="fa-solid fa-house me-1"></i> Back to Home
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

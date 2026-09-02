@@ -1,0 +1,73 @@
+<% layout("/layouts/boilerplate") %>
+
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-12 col-md-8 col-lg-6">
+            <button onclick="window.history.back()" class="btn btn-outline-secondary btn-sm rounded-pill px-3 mb-3">
+                <i class="fa-solid fa-arrow-left me-1"></i> Back
+            </button>
+
+            <div class="form-card">
+                <div class="d-flex align-items-center gap-2 mb-3">
+                    <i class="fa-solid fa-pen-to-square fs-3 text-primary"></i>
+                    <h3 class="fw-bold mb-0">Edit Photo Details</h3>
+                </div>
+                <p class="text-muted small mb-4">Update title, category, tags, or replace the photo file.</p>
+
+                <form action="/images/<%= image._id %>?_method=PUT" method="POST" enctype="multipart/form-data" novalidate class="needs-validation">
+                    <!-- Title Input -->
+                    <div class="mb-3">
+                        <label for="title" class="form-label fw-semibold text-dark">Title</label>
+                        <input type="text" id="title" name="title" class="form-control" value="<%= image.title %>" required minlength="2" maxlength="100">
+                        <div class="invalid-feedback">Please enter a valid title.</div>
+                    </div>
+
+                    <!-- Current Image Preview -->
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold text-dark small">Current Image</label>
+                        <div class="rounded-3 overflow-hidden border bg-dark p-2 text-center" style="max-height: 200px;">
+                            <img src="<%= image.image?.url || image.url %>" alt="Current Photo" class="img-fluid rounded-2" style="max-height: 180px; object-fit: contain;">
+                        </div>
+                    </div>
+
+                    <!-- Replace Image Input -->
+                    <div class="mb-3">
+                        <label for="imageFileInput" class="form-label fw-semibold text-dark">Replace Image File <span class="text-muted fw-normal">(Optional)</span></label>
+                        <input type="file" id="imageFileInput" name="url" class="form-control" accept="image/*">
+                    </div>
+
+                    <!-- Live Replacement Preview Container -->
+                    <div id="imagePreviewContainer" class="mb-3 d-none">
+                        <label class="form-label fw-semibold text-dark small">New Image Preview</label>
+                        <div class="rounded-3 overflow-hidden border bg-light p-2 text-center" style="max-height: 200px;">
+                            <img id="imagePreview" src="#" alt="New Preview" class="img-fluid rounded-2" style="max-height: 180px; object-fit: contain;">
+                        </div>
+                    </div>
+
+                    <!-- Category Selector -->
+                    <div class="mb-3">
+                        <label for="category" class="form-label fw-semibold text-dark">Category</label>
+                        <select id="category" name="category" class="form-select" required>
+                            <option value="nature" <%= image.category === 'nature' ? 'selected' : '' %>>Nature</option>
+                            <option value="animals" <%= image.category === 'animals' ? 'selected' : '' %>>Animals</option>
+                            <option value="anime" <%= image.category === 'anime' ? 'selected' : '' %>>Anime</option>
+                            <option value="universe" <%= image.category === 'universe' ? 'selected' : '' %>>Universe</option>
+                            <option value="other" <%= image.category === 'other' ? 'selected' : '' %>>Other</option>
+                        </select>
+                    </div>
+
+                    <!-- Tags Input -->
+                    <div class="mb-4">
+                        <label for="tags" class="form-label fw-semibold text-dark">Tags <span class="text-muted fw-normal">(comma-separated)</span></label>
+                        <input type="text" id="tags" name="tags" class="form-control" value="<%= image.tags ? image.tags.join(', ') : '' %>">
+                    </div>
+
+                    <!-- Submit Button -->
+                    <button type="submit" class="btn btn-dark-custom w-100 py-2 fs-6">
+                        <i class="fa-solid fa-floppy-disk me-1"></i> Save Changes
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,56 @@
+<% layout("/layouts/boilerplate") %>
+
+<div class="container my-4 my-md-5">
+    <!-- Search Header -->
+    <div class="d-flex flex-column flex-sm-row justify-content-between align-items-start align-items-sm-center pb-3 border-bottom mb-4 gap-2">
+        <div>
+            <h3 class="fw-extrabold mb-1">Search Results</h3>
+            <p class="text-muted mb-0">Showing matches for <span class="badge bg-dark text-white fs-6 font-monospace px-3 py-1">"<%= query %>"</span></p>
+        </div>
+        <span class="badge bg-primary rounded-pill px-3 py-2 fs-6">
+            <%= images.length %> <%= images.length === 1 ? 'photo' : 'photos' %> found
+        </span>
+    </div>
+
+    <!-- Empty Search Results State -->
+    <% if (images.length === 0) { %>
+        <div class="text-center py-5 my-4 bg-white rounded-4 border shadow-sm p-4">
+            <div class="mb-3 text-muted display-3">
+                <i class="fa-solid fa-magnifying-glass-minus"></i>
+            </div>
+            <h4 class="fw-bold text-dark mb-2">No photos found matching "<%= query %>"</h4>
+            <p class="text-muted mb-4" style="max-width: 500px; margin: 0 auto;">
+                Try searching for broader keywords like <strong>nature</strong>, <strong>animals</strong>, <strong>anime</strong>, or <strong>universe</strong>.
+            </p>
+            <a href="/images" class="btn btn-primary-custom rounded-pill">
+                <i class="fa-solid fa-compass me-1"></i> Browse All Photos
+            </a>
+        </div>
+    <% } else { %>
+        <!-- Image Cards Grid -->
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
+            <% images.forEach(img => { %>
+                <div class="col">
+                    <a href="/images/<%= img._id || img.id %>" class="text-decoration-none">
+                        <div class="card photo-card h-100">
+                            <img src="<%= img.image?.url || img.url %>" class="photo-card-img" alt="<%= img.title %>" loading="lazy">
+                            
+                            <!-- Hover Overlay -->
+                            <div class="photo-card-overlay">
+                                <% if (img.category) { %>
+                                    <span class="badge bg-primary align-self-start photo-badge text-capitalize mb-2">
+                                        <%= img.category %>
+                                    </span>
+                                <% } %>
+                                <h6 class="photo-card-title"><%= img.title %></h6>
+                                <div class="photo-card-author">
+                                    <i class="fa-solid fa-user-circle me-1"></i> @<%= img.owner?.username || 'Community' %>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            <% }) %>
+        </div>
+    <% } %>
+</div>

@@ -1,0 +1,34 @@
+# Dependencies
+node_modules/
+
+# Environment variables / secrets
+.env
+.env.local
+.env.*.local
+
+# macOS / OS files
+.DS_Store
+.AppleDouble
+.LSOverride
+Thumbs.db
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+logs/
+*.log
+
+# Uploaded temporary files
+public/uploads/
+public/images/
+
+# IDE / Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS temporary files
+*.tmp
+*.temp

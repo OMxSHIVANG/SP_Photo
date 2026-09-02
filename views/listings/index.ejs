@@ -1,0 +1,90 @@
+<% layout("/layouts/boilerplate") %>
+
+<% if (typeof selectedCategory === "undefined" || selectedCategory === "all") { %>
+    <%- include("../includes/hero.ejs") %>
+<% } %>
+
+<div class="container my-4">
+    <!-- Category Filter Pills Navigation -->
+    <div class="d-flex justify-content-center flex-wrap gap-2 mb-4 pb-2">
+        <% const selCat = typeof selectedCategory !== "undefined" ? selectedCategory.toLowerCase() : "all"; %>
+        <a href="/images" class="category-pill <%= selCat === 'all' ? 'active' : '' %>">
+            <i class="fa-solid fa-border-all me-1"></i> All
+        </a>
+        <a href="/images/category/nature" class="category-pill <%= selCat === 'nature' ? 'active' : '' %>">
+            <i class="fa-solid fa-tree me-1"></i> Nature
+        </a>
+        <a href="/images/category/animals" class="category-pill <%= selCat === 'animals' ? 'active' : '' %>">
+            <i class="fa-solid fa-paw me-1"></i> Animals
+        </a>
+        <a href="/images/category/anime" class="category-pill <%= selCat === 'anime' ? 'active' : '' %>">
+            <i class="fa-solid fa-wand-magic-sparkles me-1"></i> Anime
+        </a>
+        <a href="/images/category/universe" class="category-pill <%= selCat === 'universe' ? 'active' : '' %>">
+            <i class="fa-solid fa-user-astronaut me-1"></i> Universe
+        </a>
+        <a href="/images/category/other" class="category-pill <%= selCat === 'other' ? 'active' : '' %>">
+            <i class="fa-solid fa-shapes me-1"></i> Other
+        </a>
+    </div>
+
+    <!-- Category Header (When filtered) -->
+    <% if (typeof selectedCategory !== "undefined" && selectedCategory !== "all") { %>
+        <div class="d-flex justify-content-between align-items-center mb-4 pb-3 border-bottom">
+            <div class="d-flex align-items-center gap-3">
+                <a href="/images" class="btn btn-outline-dark btn-sm rounded-circle p-0 d-flex align-items-center justify-content-center" style="width: 36px; height: 36px;" title="Back to All Photos">
+                    <i class="fa-solid fa-arrow-left"></i>
+                </a>
+                <div>
+                    <h3 class="fw-extrabold text-capitalize mb-0"><%= selectedCategory %> Collection</h3>
+                    <p class="small text-muted mb-0">Showing <%= images.length %> <%= images.length === 1 ? 'photo' : 'photos' %></p>
+                </div>
+            </div>
+            <span class="badge bg-primary rounded-pill px-3 py-2 fs-6 text-capitalize"><%= selectedCategory %></span>
+        </div>
+    <% } %>
+
+    <!-- Zero State -->
+    <% if (!images || images.length === 0) { %>
+        <div class="text-center py-5 my-5">
+            <div class="mb-3 text-muted display-1">
+                <i class="fa-solid fa-images"></i>
+            </div>
+            <h4 class="fw-bold text-dark mb-2">No photos found</h4>
+            <p class="text-muted mb-4">Be the first to share a stunning photo in this collection!</p>
+            <% if (typeof currUser !== "undefined" && currUser) { %>
+                <a href="/images/new" class="btn btn-primary-custom rounded-pill">
+                    <i class="fa-solid fa-plus me-1"></i> Upload Photo
+                </a>
+            <% } else { %>
+                <a href="/login" class="btn btn-dark-custom rounded-pill">
+                    Sign in to Upload
+                </a>
+            <% } %>
+        </div>
+    <% } else { %>
+        <!-- Image Cards Grid -->
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
+            <% for(let image of images) { %>
+                <div class="col">
+                    <a href="/images/<%= image._id || image.id %>" class="text-decoration-none">
+                        <div class="card photo-card h-100">
+                            <img src="<%= image.image?.url || image.url %>" class="photo-card-img" alt="<%= image.title %>" loading="lazy">
+                            
+                            <!-- Hover Overlay -->
+                            <div class="photo-card-overlay">
+                                <span class="badge bg-primary align-self-start photo-badge text-capitalize mb-2">
+                                    <%= image.category || 'photo' %>
+                                </span>
+                                <h6 class="photo-card-title"><%= image.title %></h6>
+                                <div class="photo-card-author">
+                                    <i class="fa-solid fa-user-circle me-1"></i> @<%= image.owner?.username || 'Community' %>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            <% } %>
+        </div>
+    <% } %>
+</div>

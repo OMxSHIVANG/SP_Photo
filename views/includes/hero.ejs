@@ -1,0 +1,39 @@
+<!-- hero.ejs -->
+<div class="hero-section text-center px-3 py-5 mb-4">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-12 col-md-10 col-lg-8">
+                <h1 class="hero-title mb-3">Stunning free photos for your next project</h1>
+                <p class="hero-subtitle mb-4">Discover millions of high-resolution images contributed by a global community of creators.</p>
+
+                <form action="/search" method="GET" class="w-100">
+                    <div class="input-group hero-search-box">
+                        <span class="input-group-text border-0 bg-transparent ps-3 text-muted">
+                            <i class="fa-solid fa-magnifying-glass fs-5"></i>
+                        </span>
+                        <input 
+                            type="text" 
+                            name="q" 
+                            placeholder="Search high-res photos, categories, or tags..." 
+                            class="form-control hero-search-input"
+                            id="heroSearchInput"
+                            required
+                        >
+                        <button class="btn btn-primary-custom hero-search-btn" type="submit">
+                            Search
+                        </button>
+                    </div>
+                </form>
+
+                <!-- Trending Search Suggestions -->
+                <div class="d-flex align-items-center justify-content-center flex-wrap gap-2 mt-3 pt-2 text-white-50 small">
+                    <span class="fw-semibold text-white me-1"><i class="fa-solid fa-fire text-warning me-1"></i> Trending:</span>
+                    <a href="/search?q=nature" class="text-white-50 text-decoration-none bg-dark bg-opacity-50 px-2.5 py-1 rounded-pill border border-secondary">#nature</a>
+                    <a href="/search?q=animals" class="text-white-50 text-decoration-none bg-dark bg-opacity-50 px-2.5 py-1 rounded-pill border border-secondary">#animals</a>
+                    <a href="/search?q=anime" class="text-white-50 text-decoration-none bg-dark bg-opacity-50 px-2.5 py-1 rounded-pill border border-secondary">#anime</a>
+                    <a href="/search?q=universe" class="text-white-50 text-decoration-none bg-dark bg-opacity-50 px-2.5 py-1 rounded-pill border border-secondary">#universe</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
